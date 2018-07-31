@@ -1,0 +1,15 @@
+{
+  "name": "@actojs/ajax",
+  "version": "1.0.0",
+  "description": "A collection of handy Fetch abstractions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "hg",
+    "url": "https://bitbucket.org/acto/actojs/src/default/"
+  },
+  "author": "Elias Jørgensen <ej@acto.dk>",
+  "license": "MIT"
+}
