@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "hg",
-    "url": "https://bitbucket.org/acto/actojs/src/default/"
+    "url": "https://bitbucket.org/acto/actojs/src"
   },
   "author": "Elias Jørgensen <ej@acto.dk>",
   "license": "MIT"

@@ -251,9 +251,9 @@ export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bod
  * @param pathOnUnauthorized {String}
  * @returns {function(url: String, body: Object): Promise<Response | void>}
  */
-export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
+export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
     const settings = {
-        method: 'PUT',
+        method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${jwt}`,
             'Content-Type': 'application/json',
