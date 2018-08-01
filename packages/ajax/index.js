@@ -192,7 +192,7 @@ export const getJSONJwtFactory = (history, jwt, pathOnUnauthorized) => url => {
         }
     }
 
-    return ajax(url)
+    return ajax(url, settings)
         .then(res => res.json())
         .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
 }
@@ -215,7 +215,7 @@ export const postJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bo
         }
     }
 
-    return ajax(url)
+    return ajax(url, settings)
         .then(res => res.json())
         .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
 }
@@ -238,7 +238,7 @@ export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bod
         }
     }
 
-    return ajax(url)
+    return ajax(url, settings)
         .then(res => res.json())
         .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
 }
@@ -261,7 +261,7 @@ export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, 
         }
     }
 
-    return ajax(url)
+    return ajax(url, settings)
         .then(res => res.json())
         .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
 }
