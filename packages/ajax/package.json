@@ -1,5 +1,5 @@
 {
-  "name": "@actojs/ajax",
+  "name": "@acto/ajax",
   "version": "1.1.1",
   "description": "A collection of handy Fetch abstractions",
   "main": "index.js",
