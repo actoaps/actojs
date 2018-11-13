@@ -51,7 +51,59 @@ export const deleteJSON = (url, body) => {
 }
 
 /**
- * Returns getJSONAuth function, which in turn receives JSON from
+ * Submits a form request with the GET method and returns Wretch response.
+ * @param url
+ * @param body
+ * @returns {ResponseChain & Promise<any>}
+ */
+export const getForm = (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .formData(body)
+        .get()
+}
+
+/**
+ * Submits a form request with the POST method and returns Wretch response.
+ * @param url
+ * @param body
+ * @returns {ResponseChain & Promise<any>}
+ */
+export const postForm = (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .formData(body)
+        .post()
+}
+
+/**
+ * Submits a form request with the PUT method and returns Wretch response.
+ * @param url
+ * @param body
+ * @returns {ResponseChain & Promise<any>}
+ */
+export const putForm = (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .formData(body)
+        .put()
+}
+
+/**
+ * Submits a form request with the DELETE method and returns Wretch response.
+ * @param url
+ * @param body
+ * @returns {ResponseChain & Promise<any>}
+ */
+export const deleteForm = (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .formData(body)
+        .delete()
+}
+
+/**
+ * Returns getJSONAuthToken function, which in turn receives JSON from
  * a given URL, using the provided authToken. Redirects to pathOnUnauthorized /on 401.
  * @param history {History}
  * @param authToken {String}
@@ -66,7 +118,7 @@ export const getJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
 }
 
 /**
- * Returns postJSONAuth function, which Posts JSON to URL, using the
+ * Returns postJSONAuthToken function, which Posts JSON to URL, using the
  * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param authToken {String}
@@ -82,7 +134,7 @@ export const postJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized)
 }
 
 /**
- * Returns putJSONAuth function, which Puts JSON to URL, using the
+ * Returns putJSONAuthToken function, which Puts JSON to URL, using the
  * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param authToken {String}
@@ -98,7 +150,7 @@ export const putJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
 }
 
 /**
- * Returns deleteJSONAuth function, which sends a Delete request to URL, using the
+ * Returns deleteJSONAuthToken function, which sends a Delete request to URL, using the
  * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param authToken {String}
@@ -109,6 +161,70 @@ export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorize
     return wretch(`${url}/${authToken}`)
         .accept('application/json')
         .json(body)
+        .delete()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns getFormAuthToken function, which sends a GET form request to URL, using the
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param authToken {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const getFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .formData(body)
+        .get()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns postFormAuthToken function, which sends a POST form request to URL, using the
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param authToken {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const postFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .formData(body)
+        .post()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns putFormAuthToken function, which sends a PUT form request to URL, using the
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param authToken {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const putFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .formData(body)
+        .put()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns deleteFormAuthToken function, which sends a DELETE form request to URL, using the
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param authToken {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const deleteFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .formData(body)
         .delete()
         .unauthorized(() => history.push(pathOnUnauthorized))
 }
