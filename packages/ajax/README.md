@@ -17,7 +17,7 @@ For instance, you can chain a series of [Catchers](https://github.com/elbywan/wr
 The factories in Ajax automatically redirect to a given path (`pathOnUnauthorized`) when the response type of a request is an HTTP 401.
 It does this by using the History object, which you pass to the `history` parameter.
 
-In the `Form` varieties of the factories, Wretch [automatically converts your Javascript object to an FormData object](https://github.com/elbywan/wretch#formdataformobject-object).
+In the `Form` varieties of the factories, Wretch [automatically converts your Javascript object body to an FormData object](https://github.com/elbywan/wretch#formdataformobject-object).
 
 The `Simple` category exposes the following methods:  
 * `getJSON(url: String)`  
