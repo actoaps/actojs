@@ -40,11 +40,11 @@ The `AuthToken` category exposes the following factories:
 * `deleteFormAuthTokenFactory(history: History, authToken: String, pathOnUnauthorized: String)`  
 
 The `JWT` category exposes the following factories:  
-* `getJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `postJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `putJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `deleteJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `getFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `postFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `putFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
-* `deleteFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`
+* `getJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `postJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `putJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `deleteJSONJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `getFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `postFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `putFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+* `deleteFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
