@@ -2,3 +2,7 @@
 # yarn lockfile v1
 
 
+wretch@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/wretch/-/wretch-1.4.2.tgz#e7ee01f6606000b845041624e70d4284aecb7c97"
+  integrity sha512-pzxgTV/ewZumryk+WENp1PJqy011b3gndihFIV/czhdJl8nXG0hLDrgdhBS+WQUHey7OqzQnhSwd/OPMDL3XWw==

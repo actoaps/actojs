@@ -1,34 +1,4 @@
-/**
- * Throw error if HTTP status code is not in the 200 range
- * @param res
- * @returns {Promise<any>}
- */
-const checkStatus = res => {
-    return (res.status >= 200 && res.status < 300)
-        ? Promise.resolve(res)
-        : Promise.reject(new RangeError(res.status))
-}
-
-/**
- *  Redirects to login page, if error code is HTTP 401 Unauthorized
- * @param error {RangeError}
- * @param history {History}
- * @param path {String}
- */
-const redirectOnUnauthorized = (error, history, path) => {
-    error.message === '401' && history.push(path)
-}
-
-/**
- * Generic Fetch method to be built upon
- * @param url
- * @param settings
- * @returns {Promise<Response>}
- */
-const ajax = (url, settings) => {
-    return fetch(url, settings)
-        .then(checkStatus)
-}
+import wretch from 'wretch'
 
 /**
  * Gets JSON from URL
@@ -36,64 +6,48 @@ const ajax = (url, settings) => {
  * @returns {Promise<any>}
  */
 export const getJSON = url => {
-    const settings = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
+    return wretch(url)
+        .accept('application/json')
+        .get()
 }
 
 /**
- * Posts JSON to URL and receives JSON as response
+ * Posts JSON to URL and returns Wretch response
  * @param url
  * @param body
  * @returns {Promise<any>}
  */
 export const postJSON = (url, body) => {
-    const settings = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
+    return wretch(url)
+        .accept('application/json')
+        .json(body)
+        .post()
 }
 
 /**
- * Puts JSON to URL and receives JSON as response
+ * Puts JSON to URL and returns Wretch response
  * @param url
  * @param body
  * @returns {Promise<any>}
  */
 export const putJSON = (url, body) => {
-    const settings = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
+    return wretch(url)
+        .accept('application/json')
+        .json(body)
+        .put()
 }
 
 /**
- * Sends Delete request to URL and receives JSON as response
+ * Sends Delete request to URL and returns Wretch response
  * @param url
  * @param body
  * @returns {Promise<any>}
  */
 export const deleteJSON = (url, body) => {
-    const settings = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
+    return wretch(url)
+        .accept('application/json')
+        .json(body)
+        .delete()
 }
 
 /**
@@ -102,77 +56,61 @@ export const deleteJSON = (url, body) => {
  * @param history {History}
  * @param authToken {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String): Promise<Response | void>}
+ * @returns {function(*): Promise<{[p: string]: any}>}
  */
 export const getJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => url => {
-    const settings = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-    }
-
-    return ajax(`${url}/${authToken}`, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .get()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
  * Returns postJSONAuth function, which Posts JSON to URL, using the
- * provided authToken, and receives JSON as response. Redirects to pathOnUnauthorized on 401.
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param authToken {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String, body: Object): Promise<Response | void>}
+ * @returns {function(*, *=): ResponseChain}
  */
 export const postJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
-    const settings = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-
-    return ajax(`${url}/${authToken}`, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .json(body)
+        .post()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
  * Returns putJSONAuth function, which Puts JSON to URL, using the
- * provided authToken, and receives JSON as response. Redirects to pathOnUnauthorized on 401.
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param authToken {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String, body: Object): Promise<Response | void>}
+ * @returns {function(*, *=): ResponseChain}
  */
 export const putJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
-    const settings = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-
-    return ajax(`${url}/${authToken}`, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .json(body)
+        .put()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
  * Returns deleteJSONAuth function, which sends a Delete request to URL, using the
- * provided authToken, and receives JSON as response. Redirects to pathOnUnauthorized on 401.
+ * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param authToken {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String, body: Object): Promise<Response | void>}
+ * @returns {function(*, *=): ResponseChain}
  */
 export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body) => {
-    const settings = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-
-    return ajax(`${url}/${authToken}`, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(`${url}/${authToken}`)
+        .accept('application/json')
+        .json(body)
+        .delete()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
@@ -181,87 +119,131 @@ export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorize
  * @param history {History}
  * @param jwt {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String): Promise<Response | void>}
+ * @returns {function(*=): Promise<{[p: string]: any}>}
  */
 export const getJSONJwtFactory = (history, jwt, pathOnUnauthorized) => url => {
-    const settings = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json'
-        }
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .get()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
  * Returns postJSONJwt function, which Posts JSON to URL, using the
- * provided JWT token, and receives JSON as response. Redirects to pathOnUnauthorized on 401.
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param jwt {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String, body: Object): Promise<Response | void>}
+ * @returns {function(*, *=): ResponseChain}
  */
 export const postJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
-    const settings = {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-            body: JSON.stringify(body)
-        }
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .json(body)
+        .post()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
  * Returns putJSONJwt function, which Puts JSON to URL, using the
- * provided JWT token, and receives JSON as response. Redirects to pathOnUnauthorized on 401.
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param jwt {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String, body: Object): Promise<Response | void>}
+ * @returns {function(*, *=): ResponseChain}
  */
 export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
-    const settings = {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-            body: JSON.stringify(body)
-        }
-    }
-
-    return ajax(url, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .json(body)
+        .put()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
 
 /**
  * Returns deleteJSONAuth function, which sends a Delete request to URL, using the
- * provided JWT token, and receives JSON as response. Redirects to pathOnUnauthorized on 401.
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
  * @param history {History}
  * @param jwt {String}
  * @param pathOnUnauthorized {String}
- * @returns {function(url: String, body: Object): Promise<Response | void>}
+ * @returns {function(*, *=): ResponseChain}
  */
 export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
-    const settings = {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-            body: JSON.stringify(body)
-        }
-    }
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .json(body)
+        .delete()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
 
-    return ajax(url, settings)
-        .then(res => res.json())
-        .catch(e => redirectOnUnauthorized(e, history, pathOnUnauthorized))
+/**
+ * Returns postFormJwt function, which Posts a Form to a URL, using the
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param jwt {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const postFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .formData(body)
+        .post()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns getFormJwt function, which Gets a Form to a URL, using the
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param jwt {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const getFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .formData(body)
+        .get()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns putFormJwt function, which Puts a Form to a URL, using the
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param jwt {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const putFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .formData(body)
+        .put()
+        .unauthorized(() => history.push(pathOnUnauthorized))
+}
+
+/**
+ * Returns deleteFormJwt function, which 'Deletes' a Form to a URL, using the
+ * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * @param history {History}
+ * @param jwt {String}
+ * @param pathOnUnauthorized {String}
+ * @returns {function(*, *=): ResponseChain}
+ */
+export const deæeteFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body) => {
+    return wretch(url)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .formData(body)
+        .delete()
+        .unauthorized(() => history.push(pathOnUnauthorized))
 }
