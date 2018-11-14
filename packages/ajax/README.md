@@ -15,7 +15,7 @@ A Wretch Response is chainable, just like a Promise, but there are a series of a
 For instance, you can chain a series of [Catchers](https://github.com/elbywan/wretch#catchers) which you then follow by a [Response Type](https://github.com/elbywan/wretch#response-types).  
 
 The factories in Ajax automatically redirect to a given path (`pathOnUnauthorized`) when the response type of a request is an HTTP 401.
-It does this by using the History object, which you pass to the `history` parameter.
+It does this by using the History object, which you pass to the `history` parameter. A typical use case for this, would be to redirect your users to the login page, when their session has expired.
 
 In the `Form` varieties of the factories, Wretch [automatically converts your Javascript object body to an FormData object](https://github.com/elbywan/wretch#formdataformobject-object).
 
