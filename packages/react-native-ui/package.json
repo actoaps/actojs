@@ -1,6 +1,6 @@
 {
   "name": "@acto/react-native-ui",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "A fork of react-native-material-ui which we are adding more components too",
   "main": "./index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "hg",
-    "url": "https://bitbucket.org/acto/react-native-ui"
+    "url": "https://bitbucket.org/acto/actojs/src/default/packages/react-native-ui/"
   },
   "keywords": [
     "react-native",
@@ -51,7 +51,7 @@
     "react-native-vector-icons": "^6.0.2",
     "react-test-renderer": "16.4.1"
   },
-  "homepage": "https://bitbucket.org/acto/react-native-ui#readme",
+  "homepage": "https://bitbucket.org/acto/actojs/src/default/packages/react-native-ui/",
   "directories": {
     "doc": "docs"
   },
