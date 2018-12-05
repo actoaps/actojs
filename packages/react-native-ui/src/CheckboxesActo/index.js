@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import CheckBox from './CheckBox'
+import CheckboxActo from '../CheckboxActo'
 
 const CheckboxesActo = props => {
     return props.checkBoxes.map(c => {
         return (
-            <CheckBox
+            <CheckboxActo
                 key={c.value}
                 label={c.value}
                 value={c.value}
