@@ -1,6 +1,6 @@
 {
   "name": "@acto/react-native-ui",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A fork of react-native-material-ui which we are adding more components too",
   "main": "./index.js",
   "scripts": {
