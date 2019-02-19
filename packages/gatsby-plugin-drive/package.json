@@ -1,5 +1,5 @@
 {
-  "name": "@fs/gatsby-plugin-drive",
+  "name": "@acto/gatsby-plugin-drive",
   "version": "0.1.2",
   "main": "index.js",
   "license": "MIT",
