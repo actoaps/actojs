@@ -26,6 +26,7 @@ exports.createFileNode = async (
     }
 
     const stats = await fs.stat(slashedFile.absolutePath)
+    const extension = slashedFile.ext.slice(1).toLowerCase()
     let internal
     if (stats.isDirectory()) {
         const contentDigest = crypto
@@ -42,19 +43,18 @@ exports.createFileNode = async (
     } else {
         const contentDigest = await md5File(slashedFile.absolutePath)
         const mediaType = mime.getType(slashedFile.ext)
+        const content = isText(slashedFile.absolutePath)
+            ? fs.readFileSync(slashedFile.absolutePath, 'utf8')
+            : ''
         internal = {
             contentDigest,
             type: 'File',
             mediaType: mediaType ? mediaType : 'application/octet-stream',
-            description: `File "${path.relative(process.cwd(), slashed)}"`
+            description: `File "${path.relative(process.cwd(), slashed)}"`,
+            content: extension === 'json' ? JSON.parse(content) : content,
         }
     }
-
-    const content = (internal.type === 'File' && isText(slashedFile.absolutePath))
-        ? fs.readFileSync(slashedFile.absolutePath, 'utf8')
-        : ''
     
-    const extension = slashedFile.ext.slice(1).toLowerCase()
 
     // Stringify date objects.
     return JSON.parse(
@@ -81,7 +81,6 @@ exports.createFileNode = async (
             accessTime: stats.atime,
             changeTime: stats.ctime,
             birthTime: stats.birthtime,
-            content: extension === 'json' ? JSON.parse(content) : content,
             ...slashedFile,
             ...stats
         })
