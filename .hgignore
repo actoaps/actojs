@@ -6,3 +6,5 @@ node_modules/
 
 packages/gatsby-plugin-drive/gatsby-node.js
 packages/gatsby-plugin-drive/googleapis.js
+
+packages/gatsby-source-filesystem/*.js

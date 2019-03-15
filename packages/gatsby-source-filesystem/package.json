@@ -2,7 +2,7 @@
   "name": "@acto/gatsby-source-filesystem",
   "description": "Gatsby plugin which parses files within a directory for further parsing by other plugins",
   "version": "2.0.27",
-  "contributors":  [
+  "contributors": [
     {
       "name": "Kyle Mathews",
       "email": "mathews.kyle@gmail.com"
@@ -23,6 +23,7 @@
     "file-type": "10.2.0",
     "fs-extra": "5.0.0",
     "got": "7.1.0",
+    "istextorbinary": "2.5.1",
     "md5-file": "3.1.1",
     "mime": "2.2.0",
     "pretty-bytes": "4.0.2",

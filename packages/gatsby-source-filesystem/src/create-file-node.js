@@ -1,11 +1,12 @@
-const slash = require(`slash`)
-const path = require(`path`)
-const fs = require(`fs-extra`)
-const mime = require(`mime`)
-const prettyBytes = require(`pretty-bytes`)
+const slash = require('slash')
+const path = require('path')
+const fs = require('fs-extra')
+const mime = require('mime')
+const prettyBytes = require('pretty-bytes')
+const { isText } = require('istextorbinary')
 
-const md5File = require(`bluebird`).promisify(require(`md5-file`))
-const crypto = require(`crypto`)
+const md5File = require('bluebird').promisify(require('md5-file'))
+const crypto = require('crypto')
 
 exports.createFileNode = async (
     pathToFile,
@@ -28,14 +29,14 @@ exports.createFileNode = async (
     let internal
     if (stats.isDirectory()) {
         const contentDigest = crypto
-            .createHash(`md5`)
+            .createHash('md5')
             .update(
                 JSON.stringify({ stats: stats, absolutePath: slashedFile.absolutePath })
             )
-            .digest(`hex`)
+            .digest('hex')
         internal = {
             contentDigest,
-            type: `Directory`,
+            type: 'Directory',
             description: `Directory "${path.relative(process.cwd(), slashed)}"`
         }
     } else {
@@ -43,13 +44,16 @@ exports.createFileNode = async (
         const mediaType = mime.getType(slashedFile.ext)
         internal = {
             contentDigest,
-            type: `File`,
-            mediaType: mediaType ? mediaType : `application/octet-stream`,
+            type: 'File',
+            mediaType: mediaType ? mediaType : 'application/octet-stream',
             description: `File "${path.relative(process.cwd(), slashed)}"`
         }
     }
 
-    const content = await fs.readFileSync(slashedFile.absolutePath, 'utf8')
+    const content = (internal.type === 'File' && isText(slashedFile.absolutePath))
+        ? fs.readFileSync(slashedFile.absolutePath, 'utf8')
+        : ''
+    
     const extension = slashedFile.ext.slice(1).toLowerCase()
 
     // Stringify date objects.
@@ -62,7 +66,7 @@ exports.createFileNode = async (
             children: [],
             parent: null,
             internal,
-            sourceInstanceName: pluginOptions.name || `__PROGRAMMATIC__`,
+            sourceInstanceName: pluginOptions.name || '__PROGRAMMATIC__',
             absolutePath: slashedFile.absolutePath,
             relativePath: slash(
                 path.relative(
