@@ -15,6 +15,11 @@ exports.onPreBootstrap = (
   { graphql, actions },
   { folderId, keyFile, destination, exportGDocs, exportMimeType, exportMiddleware }
 ) => {
+  if (fs.existsSync(destination)) {
+    log('Destination folder already exists - skipping');
+    return Promise.resolve()
+  }
+
   return new Promise(async resolve => {
     log(`Started downloading content`);
 
