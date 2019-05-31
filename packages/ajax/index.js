@@ -6,7 +6,7 @@ import wretch from 'wretch'
  * @param signal
  * @returns {Promise<any>}
  */
-export const getJSON = (url, signal = null) => {
+export const getJSON = (url, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -20,7 +20,7 @@ export const getJSON = (url, signal = null) => {
  * @param signal
  * @returns {Promise<any>}
  */
-export const postJSON = (url, body, signal = null) => {
+export const postJSON = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -35,7 +35,7 @@ export const postJSON = (url, body, signal = null) => {
  * @param signal
  * @returns {Promise<any>}
  */
-export const putJSON = (url, body, signal = null) => {
+export const putJSON = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -50,7 +50,7 @@ export const putJSON = (url, body, signal = null) => {
  * @param signal
  * @returns {Promise<any>}
  */
-export const deleteJSON = (url, body, signal = null) => {
+export const deleteJSON = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -65,7 +65,7 @@ export const deleteJSON = (url, body, signal = null) => {
  * @param signal
  * @returns {ResponseChain & Promise<any>}
  */
-export const getForm = (url, body, signal = null) => {
+export const getForm = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -80,7 +80,7 @@ export const getForm = (url, body, signal = null) => {
  * @param signal
  * @returns {ResponseChain & Promise<any>}
  */
-export const postForm = (url, body, signal = null) => {
+export const postForm = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -95,7 +95,7 @@ export const postForm = (url, body, signal = null) => {
  * @param signal
  * @returns {ResponseChain & Promise<any>}
  */
-export const putForm = (url, body, signal = null) => {
+export const putForm = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -110,7 +110,7 @@ export const putForm = (url, body, signal = null) => {
  * @param signal
  * @returns {ResponseChain & Promise<any>}
  */
-export const deleteForm = (url, body, signal = null) => {
+export const deleteForm = (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -126,7 +126,7 @@ export const deleteForm = (url, body, signal = null) => {
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=): ResponseChain}
  */
-export const getJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, signal = null) => {
+export const getJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -142,7 +142,7 @@ export const getJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const postJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const postJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -159,7 +159,7 @@ export const postJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized)
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const putJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const putJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -176,7 +176,7 @@ export const putJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -193,7 +193,7 @@ export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorize
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const getFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const getFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -210,7 +210,7 @@ export const getFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const postFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const postFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -227,7 +227,7 @@ export const postFormAuthTokenFactory = (history, authToken, pathOnUnauthorized)
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const putFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const putFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -244,7 +244,7 @@ export const putFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const deleteFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = null) => {
+export const deleteFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(`${url}/${authToken}`)
         .signal(signal)
         .accept('application/json')
@@ -261,7 +261,7 @@ export const deleteFormAuthTokenFactory = (history, authToken, pathOnUnauthorize
  * @param pathOnUnauthorized {String}
  * @returns {function(*=, *=): ResponseChain}
  */
-export const getJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, signal = null) => {
+export const getJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -278,7 +278,7 @@ export const getJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, sig
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const postJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const postJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -296,7 +296,7 @@ export const postJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bo
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -314,7 +314,7 @@ export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bod
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -332,7 +332,7 @@ export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) => (url, 
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const postFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const postFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -350,7 +350,7 @@ export const postFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bo
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const getFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const getFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -368,7 +368,7 @@ export const getFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bod
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const putFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const putFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
@@ -386,7 +386,7 @@ export const putFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, bod
  * @param pathOnUnauthorized {String}
  * @returns {function(*, *=, *=): ResponseChain}
  */
-export const deæeteFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = null) => {
+export const deleteFormJwtFactory = (history, jwt, pathOnUnauthorized) => (url, body, signal = new AbortController()) => {
     return wretch(url)
         .signal(signal)
         .accept('application/json')
