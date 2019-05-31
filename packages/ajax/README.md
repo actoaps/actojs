@@ -6,8 +6,8 @@ Ajax is split into 3 categories:
 * AuthToken (Authtoken is appended to the end of the URI)  
 * JWT (Sets Authorization header with a given JWT as the bearer)  
 
-The `Simple` category is just a set of simple methods, abstracting away a bit of logic. 
-These are also the methods returned from the `AuthToken` and `JWT` factories.
+The `Simple` category is just a set of simple functions, abstracting away a bit of logic. 
+These are also the functions returned from the `AuthToken` and `JWT` factories.
 They all set an accept header with `application/json`.
 
 As Ajax is built on top of Wretch, a Wretch Response is returned in favor of a regular Promise. 
@@ -19,15 +19,17 @@ It does this by using the History object, which you pass to the `history` parame
 
 In the `Form` varieties of the factories, Wretch [automatically converts your Javascript object body to an FormData object](https://github.com/elbywan/wretch#formdataformobject-object).
 
-The `Simple` category exposes the following methods:  
-* `getJSON(url: String)`  
-* `postJSON(url: String, body: Object)`  
-* `putJSON(url: String, body: Object)`  
-* `deleteJSON(url: String, body: Object)`  
-* `getForm(url: String, body: Object)`  
-* `postForm(url: String, body: Object)`  
-* `putForm(url: String, body: Object)`  
-* `deleteForm(url: String, body: Object)`  
+All functions contain an optional last [AbortController.signal](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/signal) parameter.
+
+The `Simple` category exposes the following functions:  
+* `getJSON(url: String, [signal: AbortController.signal])`  
+* `postJSON(url: String, body: Object, [signal: AbortController.signal])`  
+* `putJSON(url: String, body: Object, [signal: AbortController.signal])`  
+* `deleteJSON(url: String, body: Object, [signal: AbortController.signal])`  
+* `getForm(url: String, body: Object, [signal: AbortController.signal])`  
+* `postForm(url: String, body: Object, [signal: AbortController.signal])`  
+* `putForm(url: String, body: Object, [signal: AbortController.signal])`  
+* `deleteForm(url: String, body: Object, [signal: AbortController.signal])`  
 
 The `AuthToken` category exposes the following factories:  
 * `getJSONAuthTokenFactory(history: History, authToken: String, pathOnUnauthorized: String)`  

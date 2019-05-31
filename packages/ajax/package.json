@@ -13,6 +13,6 @@
   "author": "Elias Jørgensen <ej@acto.dk>",
   "license": "MIT",
   "dependencies": {
-    "wretch": "^1.4.2"
+    "wretch": "1.5.2"
   }
 }
