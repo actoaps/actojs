@@ -19,17 +19,17 @@ It does this by using the History object, which you pass to the `history` parame
 
 In the `Form` varieties of the factories, Wretch [automatically converts your Javascript object body to an FormData object](https://github.com/elbywan/wretch#formdataformobject-object).
 
-All functions contain an optional last [AbortController.signal](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/signal) parameter.
+All functions contain an optional last [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) parameter.
 
 The `Simple` category exposes the following functions:  
-* `getJSON(url: String, [signal: AbortController.signal])`  
-* `postJSON(url: String, body: Object, [signal: AbortController.signal])`  
-* `putJSON(url: String, body: Object, [signal: AbortController.signal])`  
-* `deleteJSON(url: String, body: Object, [signal: AbortController.signal])`  
-* `getForm(url: String, body: Object, [signal: AbortController.signal])`  
-* `postForm(url: String, body: Object, [signal: AbortController.signal])`  
-* `putForm(url: String, body: Object, [signal: AbortController.signal])`  
-* `deleteForm(url: String, body: Object, [signal: AbortController.signal])`  
+* `getJSON(url: String, [: AbortController])`  
+* `postJSON(url: String, body: Object, [: AbortController])`  
+* `putJSON(url: String, body: Object, [: AbortController])`  
+* `deleteJSON(url: String, body: Object, [: AbortController])`  
+* `getForm(url: String, body: Object, [: AbortController])`  
+* `postForm(url: String, body: Object, [: AbortController])`  
+* `putForm(url: String, body: Object, [: AbortController])`  
+* `deleteForm(url: String, body: Object, [: AbortController])`  
 
 The `AuthToken` category exposes the following factories:  
 * `getJSONAuthTokenFactory(history: History, authToken: String, pathOnUnauthorized: String)`  
