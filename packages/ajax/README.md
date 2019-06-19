@@ -19,17 +19,17 @@ It does this by using the History object, which you pass to the `history` parame
 
 In the `Form` varieties of the factories, Wretch [automatically converts your Javascript object body to an FormData object](https://github.com/elbywan/wretch#formdataformobject-object).
 
-All functions contain an optional last [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) parameter.
+All functions contain an optional [Options](https://github.com/elbywan/wretch#optionsoptions-object-mixin-boolean--true) parameter, as well as an optional last [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) parameter.
 
 The `Simple` category exposes the following functions:  
-* `getJSON(url: String, [: AbortController])`  
-* `postJSON(url: String, body: Object, [: AbortController])`  
-* `putJSON(url: String, body: Object, [: AbortController])`  
-* `deleteJSON(url: String, body: Object, [: AbortController])`  
-* `getForm(url: String, body: Object, [: AbortController])`  
-* `postForm(url: String, body: Object, [: AbortController])`  
-* `putForm(url: String, body: Object, [: AbortController])`  
-* `deleteForm(url: String, body: Object, [: AbortController])`  
+* `getJSON(url: String, [options: Object], [controller: AbortController])`  
+* `postJSON(url: String, body: Object, [options: Object], [controller: AbortController])`  
+* `putJSON(url: String, body: Object, [options: Object], [controller: AbortController])`  
+* `deleteJSON(url: String, body: Object, [options: Object], [controller: AbortController])`  
+* `getForm(url: String, body: Object, [options: Object], [controller: AbortController])`  
+* `postForm(url: String, body: Object, [options: Object], [controller: AbortController])`  
+* `putForm(url: String, body: Object, [options: Object], [controller: AbortController])`  
+* `deleteForm(url: String, body: Object, [options: Object], [controller: AbortController])`  
 
 The `AuthToken` category exposes the following factories:  
 * `getJSONAuthTokenFactory(history: History, authToken: String, pathOnUnauthorized: String)`  
