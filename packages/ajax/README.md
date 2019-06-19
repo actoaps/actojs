@@ -50,3 +50,5 @@ The `JWT` category exposes the following factories:
 * `postFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
 * `putFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
 * `deleteFormJwtFactory(history: History, jwt: String, pathOnUnauthorized: String)`  
+
+If you need to a really special snowflake, then you can get the `Wretch` object directly, by calling the `getWretch()` function.  
