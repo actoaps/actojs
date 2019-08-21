@@ -1,5 +1,3 @@
-syntax: glob
-
 node_modules/
 .idea/
 *.iml
@@ -8,3 +6,4 @@ packages/gatsby-plugin-drive/gatsby-node.js
 packages/gatsby-plugin-drive/googleapis.js
 
 packages/gatsby-source-filesystem/*.js
+
