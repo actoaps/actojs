@@ -134,6 +134,10 @@ export const deleteForm = (url, body, options = {}, controller = new AbortContro
         .delete()
 }
 
+function onUnauthorized (history, redirectPath) {
+    history.push(redirectPath, { previousPath: history.location.pathname })
+}
+
 /**
  * Returns getJSONAuthToken function, which in turn receives JSON from
  * a given URL, using the provided authToken. Redirects to pathOnUnauthorized /on 401.
@@ -149,7 +153,7 @@ export const getJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
             .options(options)
             .accept('application/json')
             .get()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
     }
 
 /**
@@ -168,7 +172,7 @@ export const postJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized)
             .accept('application/json')
             .json(body)
             .post()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -187,7 +191,7 @@ export const putJSONAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
             .accept('application/json')
             .json(body)
             .put()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -206,7 +210,7 @@ export const deleteJSONAuthTokenFactory = (history, authToken, pathOnUnauthorize
             .accept('application/json')
             .json(body)
             .delete()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -225,7 +229,7 @@ export const getFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
             .accept('application/json')
             .formData(body)
             .get()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -244,7 +248,7 @@ export const postFormAuthTokenFactory = (history, authToken, pathOnUnauthorized)
             .accept('application/json')
             .formData(body)
             .post()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -263,7 +267,7 @@ export const putFormAuthTokenFactory = (history, authToken, pathOnUnauthorized) 
             .accept('application/json')
             .formData(body)
             .put()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -282,7 +286,7 @@ export const deleteFormAuthTokenFactory = (history, authToken, pathOnUnauthorize
             .accept('application/json')
             .formData(body)
             .delete()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -301,7 +305,7 @@ export const getJSONJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .accept('application/json')
             .auth(`Bearer ${jwt}`)
             .get()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -321,7 +325,7 @@ export const postJSONJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .json(body)
             .post()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -341,7 +345,7 @@ export const putJSONJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .json(body)
             .put()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -361,7 +365,7 @@ export const deleteJSONJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .json(body)
             .delete()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -381,7 +385,7 @@ export const postFormJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .formData(body)
             .post()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -401,7 +405,7 @@ export const getFormJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .formData(body)
             .get()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -421,7 +425,7 @@ export const putFormJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .formData(body)
             .put()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
@@ -441,7 +445,7 @@ export const deleteFormJwtFactory = (history, jwt, pathOnUnauthorized) =>
             .auth(`Bearer ${jwt}`)
             .formData(body)
             .delete()
-            .unauthorized(() => history.push(pathOnUnauthorized))
+            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
 }
 
 /**
