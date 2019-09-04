@@ -135,7 +135,7 @@ export const deleteForm = (url, body, options = {}, controller = new AbortContro
 }
 
 function onUnauthorized (history, redirectPath) {
-    history.push(redirectPath, { previousPath: history.location.pathname })
+    history.push(redirectPath, { referrer: history.location.pathname })
 }
 
 /**
