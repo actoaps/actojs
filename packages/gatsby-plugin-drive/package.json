@@ -1,9 +1,9 @@
 {
   "name": "@acto/gatsby-plugin-drive",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "index.js",
   "license": "MIT",
-  "contributors":  [
+  "contributors": [
     {
       "name": "Fabian Schultz",
       "email": "desk@fabianschultz.com"
