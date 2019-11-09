@@ -6,7 +6,7 @@
   "scripts": {
     "build:types": "tsc --emitDeclarationOnly",
     "build": "tsc",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "repository": {
     "type": "hg",

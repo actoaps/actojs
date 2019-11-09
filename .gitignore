@@ -7,3 +7,5 @@ packages/gatsby-plugin-drive/googleapis.js
 
 packages/gatsby-source-filesystem/*.js
 
+build/
+
