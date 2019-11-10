@@ -1,5 +1,5 @@
-import wretch, {WretcherOptions} from 'wretch'
-import {History} from "history";
+import wretch, { WretcherOptions } from 'wretch'
+import { History } from "history"
 
 /**
  * Gets JSON from URL
