@@ -1,6 +1,6 @@
 {
   "name": "@acto/ajax",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "A collection of handy Fetch abstractions, built on top of Wretch",
   "main": "build/index.js",
   "types": "build/index.d.ts",
