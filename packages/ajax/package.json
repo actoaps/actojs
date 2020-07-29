@@ -1,7 +1,7 @@
 {
   "name": "@acto/ajax",
-  "version": "5.0.3",
-  "description": "A collection of handy Fetch abstractions, built on top of Wretch",
+  "version": "6.0.1",
+  "description": "A collection of handy HTTP abstractions, built on top of Wretch",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -16,11 +16,10 @@
   "author": "Elias Jørgensen <ej@acto.dk>",
   "license": "MIT",
   "dependencies": {
-    "wretch": "1.5.5"
+    "wretch": "1.7.2"
   },
   "devDependencies": {
-    "@types/history": "4.7.3",
-    "typescript": "3.7.2"
+    "typescript": "3.9.7"
   },
   "files": [
     "build"

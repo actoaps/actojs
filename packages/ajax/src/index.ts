@@ -1,349 +1,302 @@
-import wretch, { WretcherOptions } from 'wretch'
-import { History } from "history"
+import wretch, { WretcherOptions, ResponseChain } from 'wretch'
+
+let responseHandling = (res: ResponseChain) => res
+
+export function setResponseHandling(handler: (res: ResponseChain) => ResponseChain) {
+    responseHandling = handler
+}
 
 /**
  * Gets JSON from URL
  */
 export const getJSON = (url: string, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
-        .get()
+        .get())
 }
 
 /**
  * Posts JSON to URL and returns Wretch response
  */
 export const postJSON = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .json(body)
-        .post()
+        .post())
 }
 
 /**
  * Puts JSON to URL and returns Wretch response
  */
 export const putJSON = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .json(body)
-        .put()
+        .put())
 }
 
 /**
  * Sends Delete request to URL and returns Wretch response
  */
 export const deleteJSON = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .json(body)
-        .delete()
+        .delete())
 }
 
 /**
  * Submits a form request with the GET method and returns Wretch response.
  */
 export const getForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .formData(body)
-        .get()
+        .get())
 }
 
 /**
  * Submits a form request with the POST method and returns Wretch response.
  */
 export const postForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .formData(body)
-        .post()
+        .post())
 }
 
 /**
  * Submits a form request with the PUT method and returns Wretch response.
  */
 export const putForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .formData(body)
-        .put()
+        .put())
 }
 
 /**
  * Submits a form request with the DELETE method and returns Wretch response.
  */
 export const deleteForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-    return wretch(url)
+    return responseHandling(wretch(url)
         .signal(controller)
         .accept('application/json')
         .options(options)
         .formData(body)
-        .delete()
-}
-
-function onUnauthorized (history: History, redirectPath: string) {
-    history.push(redirectPath, { referrer: history.location.pathname })
+        .delete())
 }
 
 /**
- * Returns getJSONAuthToken function, which in turn receives JSON from
- * a given URL, using the provided authToken. Redirects to pathOnUnauthorized /on 401.
+ * Receives JSON from a given URL, using the provided authToken.
  */
-export const getJSONAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .get()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
-    }
-
-/**
- * Returns postJSONAuthToken function, which Posts JSON to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
- */
-export const postJSONAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .json(body)
-            .post()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const getJSONAuthToken = (url: string, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .get())
 }
 
 /**
- * Returns putJSONAuthToken function, which Puts JSON to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Posts JSON to URL, using the provided authToken, and returns Wretch response. 
  */
-export const putJSONAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .json(body)
-            .put()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const postJSONAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .json(body)
+        .post())
 }
 
 /**
- * Returns deleteJSONAuthToken function, which sends a Delete request to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Puts JSON to URL, using the provided authToken, and returns Wretch response. 
  */
-export const deleteJSONAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .json(body)
-            .delete()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const putJSONAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .json(body)
+        .put())
 }
 
 /**
- * Returns getFormAuthToken function, which sends a GET form request to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Sends a Delete request to URL, using the provided authToken, and returns Wretch response. 
  */
-export const getFormAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .formData(body)
-            .get()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const deleteJSONAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .json(body)
+        .delete())
 }
 
 /**
- * Returns postFormAuthToken function, which sends a POST form request to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Sends a GET form request to URL, using the provided authToken, and returns Wretch response. 
  */
-export const postFormAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .formData(body)
-            .post()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const getFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .formData(body)
+        .get())
 }
 
 /**
- * Returns putFormAuthToken function, which sends a PUT form request to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Sends a POST form request to URL, using the provided authToken, and returns Wretch response. 
  */
-export const putFormAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .formData(body)
-            .put()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const postFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .formData(body)
+        .post())
 }
 
 /**
- * Returns deleteFormAuthToken function, which sends a DELETE form request to URL, using the
- * provided authToken, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Sends a PUT form request to URL, using the provided authToken, and returns Wretch response. 
  */
-export const deleteFormAuthTokenFactory = (history: History, authToken: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(`${url}/${authToken}`)
-            .signal(controller)
-            .accept('application/json')
-            .options(options)
-            .formData(body)
-            .delete()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const putFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .formData(body)
+        .put())
+}   
+
+/**
+ * Sends a DELETE form request to URL, using the provided authToken, and returns Wretch response. 
+ */
+export const deleteFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(`${url}/${authToken}`)
+        .signal(controller)
+        .accept('application/json')
+        .options(options)
+        .formData(body)
+        .delete())
 }
 
 /**
- * Returns getJSONJwt function, which in turn receives JSON from
- * a given URL, using the provided JWT token. Redirects to pathOnUnauthorized on 401.
+ * Receives JSON from a given URL, using the provided JWT token. 
  */
-export const getJSONJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .get()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const getJSONJwt = (url: string, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .get())
 }
 
 /**
- * Returns postJSONJwt function, which Posts JSON to URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Posts JSON to URL, using the provided JWT token, and returns Wretch response. 
  */
-export const postJSONJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .json(body)
-            .post()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const postJSONJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .json(body)
+        .post())
 }
 
 /**
- * Returns putJSONJwt function, which Puts JSON to URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Puts JSON to URL, using the provided JWT token, and returns Wretch response. 
  */
-export const putJSONJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .json(body)
-            .put()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const putJSONJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .json(body)
+        .put())
 }
 
 /**
- * Returns deleteJSONAuth function, which sends a Delete request to URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Sends a Delete request to URL, using the provided JWT token, and returns Wretch response. 
  */
-export const deleteJSONJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .json(body)
-            .delete()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const deleteJSONJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .json(body)
+        .delete())
 }
 
 /**
- * Returns postFormJwt function, which Posts a Form to a URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Posts a Form to a URL, using the provided JWT token, and returns Wretch response. 
  */
-export const postFormJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .formData(body)
-            .post()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const postFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .formData(body)
+        .post())
 }
 
 /**
- * Returns getFormJwt function, which Gets a Form to a URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Gets a Form to a URL, using the provided JWT token, and returns Wretch response. 
  */
-export const getFormJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .formData(body)
-            .get()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const getFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .formData(body)
+        .get())
 }
 
 /**
- * Returns putFormJwt function, which Puts a Form to a URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * Puts a Form to a URL, using the provided JWT token, and returns Wretch response. 
  */
-export const putFormJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .formData(body)
-            .put()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const putFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .formData(body)
+        .put())
 }
 
 /**
- * Returns deleteFormJwt function, which 'Deletes' a Form to a URL, using the
- * provided JWT token, and returns Wretch response. Redirects to pathOnUnauthorized on 401.
+ * 'Deletes' a Form to a URL, using the provided JWT token, and returns Wretch response. 
  */
-export const deleteFormJwtFactory = (history: History, jwt: string, pathOnUnauthorized: string) =>
-    (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
-        return wretch(url)
-            .signal(controller)
-            .accept('application/json')
-            .auth(`Bearer ${jwt}`)
-            .options(options)
-            .formData(body)
-            .delete()
-            .unauthorized(() => onUnauthorized(history, pathOnUnauthorized))
+export const deleteFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+    return responseHandling(wretch(url)
+        .signal(controller)
+        .accept('application/json')
+        .auth(`Bearer ${jwt}`)
+        .options(options)
+        .formData(body)
+        .delete())
 }
 
 /**
