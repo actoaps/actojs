@@ -1,0 +1,14 @@
+{
+  "name": "@acto/gatsby-transformer-content",
+  "version": "1.0.0",
+  "description": "Will load content on nodes from gatsby-source-filesystem",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omar Amer Hachach <oh@acto.dk>",
+  "license": "MIT",
+  "dependencies": {
+    "istextorbinary": "5.12.0"
+  }
+}
