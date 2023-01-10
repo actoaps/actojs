@@ -1,9 +1,9 @@
 {
   "name": "@acto/ajax",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "A collection of handy HTTP abstractions, built on top of Wretch",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "build/src/index.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "build:types": "tsc --emitDeclarationOnly",
     "build": "tsc",
@@ -16,10 +16,10 @@
   "author": "Elias Jørgensen <ej@acto.dk>",
   "license": "MIT",
   "dependencies": {
-    "wretch": "1.7.2"
+    "wretch": "2.3.1"
   },
   "devDependencies": {
-    "typescript": "3.9.7"
+    "typescript": "4.9.4"
   },
   "files": [
     "build"

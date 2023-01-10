@@ -1,30 +1,39 @@
-import wretch, { WretcherOptions, ResponseChain } from 'wretch'
+import wretch, { WretchOptions, WretchResponseChain } from 'wretch'
+import AbortAddon, { AbortResolver, AbortWretch } from 'wretch/addons/abort'
+import FormData, { FormDataAddon } from 'wretch/addons/formData'
 
-let responseHandling = (res: ResponseChain) => res
+declare type ResponseType = AbortResolver & WretchResponseChain<AbortWretch, AbortResolver>
+    | AbortResolver & WretchResponseChain<AbortWretch & FormDataAddon, AbortResolver>
 
-export function setResponseHandling(handler: (res: ResponseChain) => ResponseChain) {
+let responseHandling = (res: ResponseType) => res
+
+export function setResponseHandling(handler: (res: ResponseType) => ResponseType) {
     responseHandling = handler
 }
 
 /**
  * Gets JSON from URL
  */
-export const getJSON = (url: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const getJSON = (url: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .get())
 }
 
 /**
  * Posts JSON to URL and returns Wretch response
  */
-export const postJSON = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const postJSON = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .json(body)
         .post())
 }
@@ -32,11 +41,13 @@ export const postJSON = (url: string, body: object, options?: WretcherOptions, c
 /**
  * Puts JSON to URL and returns Wretch response
  */
-export const putJSON = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const putJSON = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .json(body)
         .put())
 }
@@ -44,11 +55,13 @@ export const putJSON = (url: string, body: object, options?: WretcherOptions, co
 /**
  * Sends Delete request to URL and returns Wretch response
  */
-export const deleteJSON = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const deleteJSON = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .json(body)
         .delete())
 }
@@ -56,11 +69,14 @@ export const deleteJSON = (url: string, body: object, options?: WretcherOptions,
 /**
  * Submits a form request with the GET method and returns Wretch response.
  */
-export const getForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const getForm = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .get())
 }
@@ -68,11 +84,14 @@ export const getForm = (url: string, body: object, options?: WretcherOptions, co
 /**
  * Submits a form request with the POST method and returns Wretch response.
  */
-export const postForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const postForm = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .post())
 }
@@ -80,11 +99,14 @@ export const postForm = (url: string, body: object, options?: WretcherOptions, c
 /**
  * Submits a form request with the PUT method and returns Wretch response.
  */
-export const putForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const putForm = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .put())
 }
@@ -92,11 +114,14 @@ export const putForm = (url: string, body: object, options?: WretcherOptions, co
 /**
  * Submits a form request with the DELETE method and returns Wretch response.
  */
-export const deleteForm = (url: string, body: object, options?: WretcherOptions, controller = new AbortController()) => {
+export const deleteForm = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .delete())
 }
@@ -104,197 +129,237 @@ export const deleteForm = (url: string, body: object, options?: WretcherOptions,
 /**
  * Receives JSON from a given URL, using the provided authToken.
  */
-export const getJSONAuthToken = (url: string, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const getJSONAuthToken = (url: string, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .get())
 }
 
 /**
- * Posts JSON to URL, using the provided authToken, and returns Wretch response. 
+ * Posts JSON to URL, using the provided authToken, and returns Wretch response.
  */
-export const postJSONAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const postJSONAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .json(body)
         .post())
 }
 
 /**
- * Puts JSON to URL, using the provided authToken, and returns Wretch response. 
+ * Puts JSON to URL, using the provided authToken, and returns Wretch response.
  */
-export const putJSONAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const putJSONAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .json(body)
         .put())
 }
 
 /**
- * Sends a Delete request to URL, using the provided authToken, and returns Wretch response. 
+ * Sends a Delete request to URL, using the provided authToken, and returns Wretch response.
  */
-export const deleteJSONAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const deleteJSONAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .json(body)
         .delete())
 }
 
 /**
- * Sends a GET form request to URL, using the provided authToken, and returns Wretch response. 
+ * Sends a GET form request to URL, using the provided authToken, and returns Wretch response.
  */
-export const getFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const getFormAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .get())
 }
 
 /**
- * Sends a POST form request to URL, using the provided authToken, and returns Wretch response. 
+ * Sends a POST form request to URL, using the provided authToken, and returns Wretch response.
  */
-export const postFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const postFormAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .post())
 }
 
 /**
- * Sends a PUT form request to URL, using the provided authToken, and returns Wretch response. 
+ * Sends a PUT form request to URL, using the provided authToken, and returns Wretch response.
  */
-export const putFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const putFormAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .put())
-}   
+}
 
 /**
- * Sends a DELETE form request to URL, using the provided authToken, and returns Wretch response. 
+ * Sends a DELETE form request to URL, using the provided authToken, and returns Wretch response.
  */
-export const deleteFormAuthToken = (url: string, body: object, authToken: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const deleteFormAuthToken = (url: string, body: object, authToken: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(`${url}/${authToken}`)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
-        .options(options)
+        .options(options || {})
         .formData(body)
         .delete())
 }
 
 /**
- * Receives JSON from a given URL, using the provided JWT token. 
+ * Receives JSON from a given URL, using the provided JWT token.
  */
-export const getJSONJwt = (url: string, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const getJSONJwt = (url: string, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .get())
 }
 
 /**
- * Posts JSON to URL, using the provided JWT token, and returns Wretch response. 
+ * Posts JSON to URL, using the provided JWT token, and returns Wretch response.
  */
-export const postJSONJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const postJSONJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .json(body)
         .post())
 }
 
 /**
- * Puts JSON to URL, using the provided JWT token, and returns Wretch response. 
+ * Puts JSON to URL, using the provided JWT token, and returns Wretch response.
  */
-export const putJSONJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const putJSONJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .json(body)
         .put())
 }
 
 /**
- * Sends a Delete request to URL, using the provided JWT token, and returns Wretch response. 
+ * Sends a Delete request to URL, using the provided JWT token, and returns Wretch response.
  */
-export const deleteJSONJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const deleteJSONJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .json(body)
         .delete())
 }
 
 /**
- * Posts a Form to a URL, using the provided JWT token, and returns Wretch response. 
+ * Posts a Form to a URL, using the provided JWT token, and returns Wretch response.
  */
-export const postFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const postFormJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .formData(body)
         .post())
 }
 
 /**
- * Gets a Form to a URL, using the provided JWT token, and returns Wretch response. 
+ * Gets a Form to a URL, using the provided JWT token, and returns Wretch response.
  */
-export const getFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const getFormJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .formData(body)
         .get())
 }
 
 /**
- * Puts a Form to a URL, using the provided JWT token, and returns Wretch response. 
+ * Puts a Form to a URL, using the provided JWT token, and returns Wretch response.
  */
-export const putFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const putFormJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .formData(body)
         .put())
 }
 
 /**
- * 'Deletes' a Form to a URL, using the provided JWT token, and returns Wretch response. 
+ * 'Deletes' a Form to a URL, using the provided JWT token, and returns Wretch response.
  */
-export const deleteFormJwt = (url: string, body: object, jwt: string, options?: WretcherOptions, controller = new AbortController()) => {
+export const deleteFormJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
+        .addon(AbortAddon())
+        .addon(FormData)
+        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
-        .options(options)
+        .options(options || {})
         .formData(body)
         .delete())
 }
