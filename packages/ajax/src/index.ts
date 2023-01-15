@@ -1,4 +1,4 @@
-import wretch, {Wretch, WretchOptions, WretchResponseChain} from 'wretch'
+import wretch, {WretchOptions, WretchResponseChain} from 'wretch'
 import AbortAddon, { AbortResolver, AbortWretch } from 'wretch/addons/abort'
 import FormData, { FormDataAddon } from 'wretch/addons/formData'
 
