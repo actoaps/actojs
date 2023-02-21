@@ -2,12 +2,15 @@ import wretch, {WretchOptions, WretchResponseChain} from 'wretch'
 import AbortAddon, { AbortResolver, AbortWretch } from 'wretch/addons/abort'
 import FormData, { FormDataAddon } from 'wretch/addons/formData'
 
-declare type ResponseType = AbortResolver & WretchResponseChain<AbortWretch, AbortResolver>
-    | AbortResolver & WretchResponseChain<AbortWretch & FormDataAddon, AbortResolver>
+export declare type AbortResolverResponse = AbortResolver & WretchResponseChain<AbortWretch, AbortResolver>
+export declare type FormDataResponse = AbortResolver & WretchResponseChain<AbortWretch & FormDataAddon, AbortResolver>
 
-let responseHandling = (res: ResponseType) => res
+export declare type ResponseType = AbortResolverResponse | FormDataResponse
 
-export function setResponseHandling(handler: (res: ResponseType) => ResponseType) {
+let responseHandling = <T = ResponseType> (res: T) => res
+
+export function setResponseHandling (handler: (x: ResponseType) => ResponseType) {
+    // @ts-ignore
     responseHandling = handler
 }
 
@@ -17,7 +20,6 @@ export function setResponseHandling(handler: (res: ResponseType) => ResponseType
 export const getJSON = (url: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
@@ -30,7 +32,6 @@ export const getJSON = (url: string, options?: WretchOptions, controller = new A
 export const postJSON = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
@@ -44,7 +45,6 @@ export const postJSON = (url: string, body: object, options?: WretchOptions, con
 export const putJSON = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
@@ -58,27 +58,11 @@ export const putJSON = (url: string, body: object, options?: WretchOptions, cont
 export const deleteJSON = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
         .json(body)
         .delete())
-}
-
-/**
- * Submits a form request with the GET method and returns Wretch response.
- */
-export const getForm = (url: string, body: object, options?: WretchOptions, controller = new AbortController()) => {
-    return responseHandling(wretch(url)
-        .addon(AbortAddon())
-        .addon(FormData)
-        .errorType('json')
-        .signal(controller)
-        .accept('application/json')
-        .options(options || {})
-        .formData(body)
-        .get())
 }
 
 /**
@@ -88,7 +72,6 @@ export const postForm = (url: string, body: object, options?: WretchOptions, con
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
@@ -103,7 +86,6 @@ export const putForm = (url: string, body: object, options?: WretchOptions, cont
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
@@ -118,7 +100,6 @@ export const deleteForm = (url: string, body: object, options?: WretchOptions, c
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .options(options || {})
@@ -132,7 +113,6 @@ export const deleteForm = (url: string, body: object, options?: WretchOptions, c
 export const getJSONJwt = (url: string, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -146,7 +126,6 @@ export const getJSONJwt = (url: string, jwt: string, options?: WretchOptions, co
 export const postJSONJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -161,7 +140,6 @@ export const postJSONJwt = (url: string, body: object, jwt: string, options?: Wr
 export const putJSONJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -176,7 +154,6 @@ export const putJSONJwt = (url: string, body: object, jwt: string, options?: Wre
 export const deleteJSONJwt = (url: string, body: object, jwt: string, options?: WretchOptions, controller = new AbortController()) => {
     return responseHandling(wretch(url)
         .addon(AbortAddon())
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -192,7 +169,6 @@ export const postFormJwt = (url: string, body: object, jwt: string, options?: Wr
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -208,7 +184,6 @@ export const getFormJwt = (url: string, body: object, jwt: string, options?: Wre
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -224,7 +199,6 @@ export const putFormJwt = (url: string, body: object, jwt: string, options?: Wre
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -240,7 +214,6 @@ export const deleteFormJwt = (url: string, body: object, jwt: string, options?: 
     return responseHandling(wretch(url)
         .addon(AbortAddon())
         .addon(FormData)
-        .errorType('json')
         .signal(controller)
         .accept('application/json')
         .auth(`Bearer ${jwt}`)
@@ -264,8 +237,3 @@ export const customReqJwt = (url: string, jwt: string, reqBuilder: (builder: Abo
 
     return responseHandling(reqBuilder(baseRequest))
 }
-
-/**
- * Get wretch factory, for building custom ajax functions
- */
-export const getWretch = () => wretch
