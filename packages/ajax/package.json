@@ -16,7 +16,7 @@
   "author": "Elias Jørgensen <ej@acto.dk>",
   "license": "MIT",
   "peerDependencies": {
-    "wretch": ">=2.0.0"
+    "wretch": ">=2.5.0"
   },
   "devDependencies": {
     "typescript": "4.9.5",
